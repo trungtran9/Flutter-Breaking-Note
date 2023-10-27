@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../models/breakdance_move.dart';
+import '../utils/shared_preference_helper.dart';
 import 'move_detail.dart';
 
 class MoveFormPage extends StatefulWidget {
   final List<BreakdanceMove> moves;
+  final void Function(dynamic) onSave;
 
-  MoveFormPage({required this.moves});
+  MoveFormPage({required this.moves, required this.onSave});
 
   @override
   _MoveFormPageState createState() => _MoveFormPageState();
@@ -16,34 +18,48 @@ class _MoveFormPageState extends State<MoveFormPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final String _name = "";
+  String _name = "";
   String _category = "";
   String _description = "";
   int _difficulty = 1;
 
-  final List<Widget Function(List<MoveCategory>, String, ValueChanged<String>)>
-      _pages = [
-    (categories, selectedCategory, onChanged) => ChooseCategoryStep(
-          categories: categories,
-          selectedCategory: selectedCategory,
-          onChanged: onChanged,
-        ),
-    (categories, selectedCategory, onChanged) => MoveDetailStep(
-          selectedCategory: selectedCategory,
-          onChanged: onChanged,
-        ),
-    // ... rest of the pages ...
-  ];
   final List<MoveCategory> _categories = [
-    MoveCategory(name: 'Toprock', icon: Icons.directions_walk),
-    MoveCategory(name: 'Footwork', icon: Icons.directions_run),
-    MoveCategory(name: 'Powermove', icon: Icons.power),
-    MoveCategory(name: 'Freeze', icon: Icons.ac_unit),
-    MoveCategory(name: 'Transition', icon: Icons.compare_arrows),
-    MoveCategory(name: 'Floorwork', icon: Icons.grid_on),
-    MoveCategory(name: 'Burns', icon: Icons.fireplace),
-    MoveCategory(name: 'Custom', icon: Icons.category),
+    MoveCategory(
+        name: 'Toprock', path: 'assets/icons/category_icons/toprock.png'),
+    MoveCategory(
+        name: 'Footwork', path: 'assets/icons/category_icons/footwork.png'),
+    MoveCategory(
+        name: 'Powermove', path: 'assets/icons/category_icons/powermove.png'),
+    MoveCategory(
+        name: 'Freeze', path: 'assets/icons/category_icons/freeze.png'),
+    MoveCategory(
+        name: 'Transition', path: 'assets/icons/category_icons/loading.png'),
+    MoveCategory(
+        name: 'Floorwork', path: 'assets/icons/category_icons/freeze.png'),
+    MoveCategory(name: 'Burns', path: 'assets/icons/category_icons/burns.png'),
+    MoveCategory(name: 'Custom', path: 'assets/icons/category_icons/add.png'),
   ];
+
+  void _saveMove() {
+    // Get the values of the form fields
+    String name = _name;
+    String category = _category;
+    int difficulty = _difficulty;
+    String description = _description;
+
+    BreakdanceMove newMove = BreakdanceMove(
+      name: name,
+      description: description,
+      category: category,
+      difficulty: difficulty.toInt(),
+      dateCreated: DateTime.now(),
+    );
+
+    //Call save function
+    widget.onSave(newMove);
+    // Close the current page
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,13 +77,33 @@ class _MoveFormPageState extends State<MoveFormPage> {
                   _currentPage = page;
                 });
               },
-              itemCount: _pages.length,
+              itemCount: 2,
               itemBuilder: (context, index) {
-                return _pages[index](_categories, _category, (category) {
-                  setState(() {
-                    _category = category;
-                  });
-                });
+                if (_currentPage == 0) {
+                  return CategoryStep(
+                    categories: _categories,
+                    selectedCategory: _category,
+                    onChanged: (value) {
+                      setState(() {
+                        _category = value;
+                      });
+                    },
+                  );
+                } else if (_currentPage == 1) {
+                  return MoveDetailStep(
+                    name: _name,
+                    description: _description,
+                    difficulty: _difficulty.toDouble(),
+                    onChanged: (name, description, difficulty) {
+                      setState(() {
+                        _name = name;
+                        _description = description;
+                        _difficulty = difficulty;
+                      });
+                    },
+                  );
+                }
+                return null;
               },
             ),
           ),
@@ -80,29 +116,25 @@ class _MoveFormPageState extends State<MoveFormPage> {
                   ElevatedButton(
                     onPressed: () {
                       _pageController.previousPage(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
                     },
-                    child: Text('Previous'),
+                    child: const Text('Previous'),
                   ),
-                if (_currentPage < _pages.length - 1)
+                if (_currentPage < 1)
                   ElevatedButton(
                     onPressed: () {
                       _pageController.nextPage(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
                     },
                     child: Text('Next'),
                   ),
-                if (_currentPage == _pages.length - 1)
+                if (_currentPage == 1)
                   ElevatedButton(
-                    onPressed: () {
-                      // Save the move and navigate back
-                      // Add your logic to save the move here
-                      Navigator.pop(context);
-                    },
+                    onPressed: _saveMove,
                     child: Text('Save'),
                   ),
               ],
@@ -114,12 +146,12 @@ class _MoveFormPageState extends State<MoveFormPage> {
   }
 }
 
-class ChooseCategoryStep extends StatelessWidget {
+class CategoryStep extends StatelessWidget {
   final List<MoveCategory> categories;
   final String selectedCategory;
   final ValueChanged<String> onChanged;
 
-  ChooseCategoryStep({
+  CategoryStep({
     required this.categories,
     required this.selectedCategory,
     required this.onChanged,
@@ -154,8 +186,8 @@ class ChooseCategoryStep extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    categories[index].icon,
+                  ImageIcon(
+                    AssetImage(categories[index].path),
                     color: isSelected ? Colors.blue : Colors.grey,
                     size: 48, // Increase the icon size
                   ),
@@ -201,7 +233,7 @@ class StepPage extends StatelessWidget {
 
 class MoveCategory {
   final String name;
-  final IconData icon;
+  final String path;
 
-  MoveCategory({required this.name, required this.icon});
+  MoveCategory({required this.name, required this.path});
 }

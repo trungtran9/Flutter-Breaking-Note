@@ -5,11 +5,12 @@ import '../utils/shared_preference_helper.dart';
 import 'move_form_page.dart';
 
 class MovesTab extends StatefulWidget {
-  const MovesTab({super.key});
+  final SharedPreferencesHelper _sharedPreferencesHelper =
+      SharedPreferencesHelper();
+  SharedPreferencesHelper get sharedPreferencesHelper =>
+      _sharedPreferencesHelper;
 
-  // final List<MoveModel> moves;
-  // final Function(MoveModel) addMove;
-  // final Function(String) addCategory;
+  MovesTab({super.key});
 
   @override
   _MovesTabState createState() => _MovesTabState();
@@ -59,6 +60,11 @@ class _MovesTabState extends State<MovesTab> {
         moves = updatedMoves;
       });
     }
+  }
+
+  void addMove(BreakdanceMove move) {
+    moves.add(move);
+    SharedPreferencesHelper.saveMoves(moves);
   }
 
   @override
@@ -150,7 +156,13 @@ class _MovesTabState extends State<MovesTab> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => MoveFormPage(moves: moves),
+              builder: (context) => MoveFormPage(
+                moves: moves,
+                onSave: (move) {
+                  addMove(move);
+                  loadMoves;
+                },
+              ),
             ),
           );
         },
