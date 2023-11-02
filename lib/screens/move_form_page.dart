@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../models/breakdance_move.dart';
 import '../utils/shared_preference_helper.dart';
@@ -17,6 +20,8 @@ class MoveFormPage extends StatefulWidget {
 class _MoveFormPageState extends State<MoveFormPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  final StreamController<XFile?> _imageStreamController =
+      StreamController<XFile?>.broadcast();
 
   String _name = "";
   String _category = "";
@@ -94,6 +99,7 @@ class _MoveFormPageState extends State<MoveFormPage> {
                     name: _name,
                     description: _description,
                     difficulty: _difficulty.toDouble(),
+                    //image: _imageStreamController.stream.first,
                     onChanged: (name, description, difficulty) {
                       setState(() {
                         _name = name;
