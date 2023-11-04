@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
@@ -13,7 +13,7 @@ class MoveDetailStep extends StatefulWidget {
   final void Function(String, String, int) onChanged;
 //  final XFile? image;
 
-  MoveDetailStep({
+  const MoveDetailStep({
     required this.name,
     required this.description,
     required this.difficulty,
@@ -22,16 +22,24 @@ class MoveDetailStep extends StatefulWidget {
   });
 
   @override
-  _MoveDetailStepState createState() => _MoveDetailStepState();
+  MoveDetailStepState createState() => MoveDetailStepState();
 }
 
-class _MoveDetailStepState extends State<MoveDetailStep> {
+class MoveDetailStepState extends State<MoveDetailStep> {
   final ImagePicker _picker = ImagePicker();
   XFile? image;
-
   // Function to open the image/video picker
-  Future _pickImageOrVideo() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+  Future pickMedia() async {
+    final pickedFile = await _picker.pickVideo(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        image = XFile(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> captureMedia() async {
+    final pickedFile = await _picker.pickVideo(source: ImageSource.camera);
     if (pickedFile != null) {
       setState(() {
         image = XFile(pickedFile.path);
@@ -40,25 +48,58 @@ class _MoveDetailStepState extends State<MoveDetailStep> {
   }
 
   // Widget to display the selected image or video
-  Widget _displayImageOrVideo(XFile? image) {
+  Widget displayMedia(XFile? image) {
     if (image!.path.endsWith('.mp4')) {
       // Display video
       final videoController = VideoPlayerController.file(File(image.path));
-      return Container(
-        width: 300, // Adjust the width as needed
-        height: 200, // Adjust the height as needed
+      videoController!.initialize().then((value) {
+        setState(() {});
+      });
+      return SizedBox(
+        width: 300,
+        height: 200,
         child: VideoPlayer(videoController),
       );
     } else {
-      return Container(
-        width: 300, // Adjust the width as needed
-        height: 200, // Adjust the height as needed
-        child: Image.file(
-          File(image.path),
-          fit: BoxFit.cover, // You can adjust the BoxFit value as needed
-        ),
-      );
+      if (!kIsWeb) {
+        return SizedBox(
+          width: 300,
+          height: 200,
+          child: Image.file(File(image.path), fit: BoxFit.cover),
+        );
+      } else {
+        return Image.network(image.path, fit: BoxFit.cover);
+      }
     }
+  }
+
+  void _showMediaOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Pick from Gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                pickMedia();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Take Photo/Video'),
+              onTap: () {
+                Navigator.pop(context);
+                captureMedia();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -94,10 +135,10 @@ class _MoveDetailStepState extends State<MoveDetailStep> {
           },
         ),
         ElevatedButton(
-          onPressed: _pickImageOrVideo,
-          child: const Text("Import Image/Video"),
+          onPressed: _showMediaOptions,
+          child: const Text("Import media"),
         ),
-        image != null ? _displayImageOrVideo(image) : SizedBox(),
+        image != null ? displayMedia(image) : const SizedBox(),
       ],
     );
   }

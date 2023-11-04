@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "51362732522",
+    "firebase_url": "https://breaking-note-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "breaking-note",
+    "storage_bucket": "breaking-note.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51362732522:android:dd4033d216b82385fcba93",
+        "android_client_info": {
+          "package_name": "com.example.firstapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfijDVp1ilSy4_cornly_JfivVK6NPdgo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51362732522:android:8323bcbb6f117708fcba93",
+        "android_client_info": {
+          "package_name": "com.trungtran.breakingnote"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfijDVp1ilSy4_cornly_JfivVK6NPdgo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

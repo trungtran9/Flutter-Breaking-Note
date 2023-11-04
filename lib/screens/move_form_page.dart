@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:firstapp/screens/move_category.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../models/breakdance_move.dart';
-import '../utils/shared_preference_helper.dart';
 import 'move_detail.dart';
 
 class MoveFormPage extends StatefulWidget {
@@ -14,10 +14,10 @@ class MoveFormPage extends StatefulWidget {
   MoveFormPage({required this.moves, required this.onSave});
 
   @override
-  _MoveFormPageState createState() => _MoveFormPageState();
+  MoveFormPageState createState() => MoveFormPageState();
 }
 
-class _MoveFormPageState extends State<MoveFormPage> {
+class MoveFormPageState extends State<MoveFormPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   final StreamController<XFile?> _imageStreamController =
@@ -116,7 +116,7 @@ class _MoveFormPageState extends State<MoveFormPage> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 if (_currentPage > 0)
                   ElevatedButton(
@@ -136,12 +136,12 @@ class _MoveFormPageState extends State<MoveFormPage> {
                         curve: Curves.easeInOut,
                       );
                     },
-                    child: Text('Next'),
+                    child: const Text('Next'),
                   ),
                 if (_currentPage == 1)
                   ElevatedButton(
                     onPressed: _saveMove,
-                    child: Text('Save'),
+                    child: const Text('Save'),
                   ),
               ],
             ),
@@ -150,96 +150,4 @@ class _MoveFormPageState extends State<MoveFormPage> {
       ),
     );
   }
-}
-
-class CategoryStep extends StatelessWidget {
-  final List<MoveCategory> categories;
-  final String selectedCategory;
-  final ValueChanged<String> onChanged;
-
-  CategoryStep({
-    required this.categories,
-    required this.selectedCategory,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return StepPage(
-      title: 'Choose the category',
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 15, // Add spacing between categories
-          mainAxisSpacing: 10,
-        ),
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          final isSelected = categories[index].name == selectedCategory;
-
-          return GestureDetector(
-            onTap: () {
-              onChanged(categories[index].name);
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: isSelected ? Colors.blue : Colors.grey,
-                  width: 2, // Border width
-                ),
-                borderRadius: BorderRadius.circular(8), // Rounded corners
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ImageIcon(
-                    AssetImage(categories[index].path),
-                    color: isSelected ? Colors.blue : Colors.grey,
-                    size: 48, // Increase the icon size
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    categories[index].name,
-                    style: TextStyle(
-                      color: isSelected ? Colors.blue : Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class StepPage extends StatelessWidget {
-  final String title;
-  final Widget child;
-
-  StepPage({required this.title, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          SizedBox(height: 16),
-          Expanded(child: child),
-        ],
-      ),
-    );
-  }
-}
-
-class MoveCategory {
-  final String name;
-  final String path;
-
-  MoveCategory({required this.name, required this.path});
 }
