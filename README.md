@@ -13,5 +13,7 @@ The Breaking Note app is created for dancers to create and record their own trai
   
 # Getting started
 
-
+To setup the repo:
+1. Clone the project to local
+2. Run "flutter pub get" in Terminal to resolve any dependencies.
   
