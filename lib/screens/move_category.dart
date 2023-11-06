@@ -5,7 +5,8 @@ class CategoryStep extends StatelessWidget {
   final String selectedCategory;
   final ValueChanged<String> onChanged;
 
-  CategoryStep({
+  const CategoryStep({
+    super.key,
     required this.categories,
     required this.selectedCategory,
     required this.onChanged,
@@ -28,7 +29,7 @@ class CategoryStep extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 20,
             mainAxisSpacing: 10,
-            childAspectRatio: (1 / .4)),
+            childAspectRatio: (1.5)),
         itemCount: categories.length,
         itemBuilder: (context, index) {
           final isSelected = categories[index].name == selectedCategory;

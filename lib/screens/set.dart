@@ -6,6 +6,8 @@ import '../utils/shared_preference_helper.dart';
 import 'move_search.dart';
 
 class SetsTab extends StatefulWidget {
+  const SetsTab({super.key});
+
   @override
   _SetTabState createState() => _SetTabState();
 }
@@ -72,7 +74,7 @@ class _SetTabState extends State<SetsTab> {
             loadSets(); // Reload the sets after adding a new set
           });
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -82,7 +84,7 @@ class AddSetPopup extends StatefulWidget {
   final Function(SetModel) addSet;
   final List<BreakdanceMove> moves;
 
-  AddSetPopup({required this.addSet, required this.moves});
+  const AddSetPopup({super.key, required this.addSet, required this.moves});
 
   @override
   _AddSetPopupState createState() => _AddSetPopupState();
@@ -95,29 +97,29 @@ class _AddSetPopupState extends State<AddSetPopup> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Add New Set"),
+      title: const Text("Add New Set"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
-            decoration: InputDecoration(labelText: "Set Name"),
+            decoration: const InputDecoration(labelText: "Set Name"),
             onChanged: (value) {
               setState(() {
                 setName = value;
               });
             },
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             children: [
-              Text("Sequence: "),
+              const Text("Sequence: "),
               TextButton(
                 onPressed: () async {
                   _showSelectMovePage();
                 },
-                child: Text("Select Move"),
+                child: const Text("Select Move"),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: Text(
                   selectedMoves.isNotEmpty
@@ -134,7 +136,7 @@ class _AddSetPopupState extends State<AddSetPopup> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Cancel"),
+          child: const Text("Cancel"),
         ),
         ElevatedButton(
           onPressed: () {
@@ -143,7 +145,7 @@ class _AddSetPopupState extends State<AddSetPopup> {
                 .addSet(newSet); // Call the addSet function provided by SetPage
             Navigator.of(context).pop();
           },
-          child: Text("Save"),
+          child: const Text("Save"),
         ),
       ],
     );

@@ -11,7 +11,7 @@ class MoveFormPage extends StatefulWidget {
   final List<BreakdanceMove> moves;
   final void Function(dynamic) onSave;
 
-  MoveFormPage({required this.moves, required this.onSave});
+  const MoveFormPage({super.key, required this.moves, required this.onSave});
 
   @override
   MoveFormPageState createState() => MoveFormPageState();
@@ -63,7 +63,7 @@ class MoveFormPageState extends State<MoveFormPage> {
     //Call save function
     widget.onSave(newMove);
     // Close the current page
-    Navigator.pop(context);
+    Navigator.pop(context, newMove);
   }
 
   @override

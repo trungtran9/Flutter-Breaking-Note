@@ -135,13 +135,23 @@ class _MovesTabState extends State<MovesTab> {
                               color: Colors.white,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              _deleteMove(
-                                  move); // Implement the _deleteMove method
+                          PopupMenuButton<String>(
+                            onSelected: (String choice) {
+                              if (choice == 'Edit') {
+                                _editMove(move);
+                              } else if (choice == 'Delete') {
+                                _deleteMove(move);
+                              }
                             },
-                            child: const Icon(Icons.delete),
-                          )
+                            itemBuilder: (BuildContext context) {
+                              return ['Edit', 'Delete'].map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList();
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -154,7 +164,8 @@ class _MovesTabState extends State<MovesTab> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
+          Navigator.of(context)
+              .push(
             MaterialPageRoute(
               builder: (context) => MoveFormPage(
                 moves: moves,
@@ -164,7 +175,12 @@ class _MovesTabState extends State<MovesTab> {
                 },
               ),
             ),
-          );
+          )
+              .then((result) {
+            if (result != null && result is BreakdanceMove) {
+              setState(() {});
+            }
+          });
         },
         child: const Icon(Icons.add),
       ),

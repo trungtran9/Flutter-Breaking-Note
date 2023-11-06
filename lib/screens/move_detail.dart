@@ -14,6 +14,7 @@ class MoveDetailStep extends StatefulWidget {
 //  final XFile? image;
 
   const MoveDetailStep({
+    super.key,
     required this.name,
     required this.description,
     required this.difficulty,
@@ -28,6 +29,7 @@ class MoveDetailStep extends StatefulWidget {
 class MoveDetailStepState extends State<MoveDetailStep> {
   final ImagePicker _picker = ImagePicker();
   XFile? image;
+  VideoPlayerController? videoController;
   // Function to open the image/video picker
   Future pickMedia() async {
     final pickedFile = await _picker.pickVideo(source: ImageSource.gallery);
@@ -51,14 +53,16 @@ class MoveDetailStepState extends State<MoveDetailStep> {
   Widget displayMedia(XFile? image) {
     if (image!.path.endsWith('.mp4')) {
       // Display video
-      final videoController = VideoPlayerController.file(File(image.path));
-      videoController!.initialize().then((value) {
-        setState(() {});
-      });
-      return SizedBox(
-        width: 300,
-        height: 200,
-        child: VideoPlayer(videoController),
+      videoController = VideoPlayerController.file(File(image.path))
+        ..initialize().then((value) {
+          setState(() {});
+        });
+      return Container(
+        width: 350,
+        height: 250,
+        child: videoController!.value.isInitialized
+            ? VideoPlayer(videoController!)
+            : Container(),
       );
     } else {
       if (!kIsWeb) {
@@ -71,6 +75,12 @@ class MoveDetailStepState extends State<MoveDetailStep> {
         return Image.network(image.path, fit: BoxFit.cover);
       }
     }
+  }
+
+  @override
+  void dispose() {
+    videoController?.dispose();
+    super.dispose();
   }
 
   void _showMediaOptions() {
