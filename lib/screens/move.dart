@@ -138,7 +138,7 @@ class _MovesTabState extends State<MovesTab> {
                           PopupMenuButton<String>(
                             onSelected: (String choice) {
                               if (choice == 'Edit') {
-                                _editMove(move);
+                                _handleMoveEdit(move);
                               } else if (choice == 'Delete') {
                                 _deleteMove(move);
                               }

@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:firstapp/screens/move_category.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../models/breakdance_move.dart';
 import 'move_detail.dart';
@@ -20,13 +17,12 @@ class MoveFormPage extends StatefulWidget {
 class MoveFormPageState extends State<MoveFormPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  final StreamController<XFile?> _imageStreamController =
-      StreamController<XFile?>.broadcast();
-
   String _name = "";
   String _category = "";
   String _description = "";
+  String _path = "";
   int _difficulty = 1;
+  bool _isFormValid = false;
 
   final List<MoveCategory> _categories = [
     MoveCategory(
@@ -51,13 +47,14 @@ class MoveFormPageState extends State<MoveFormPage> {
     String category = _category;
     int difficulty = _difficulty;
     String description = _description;
-
+    String path = _path;
     BreakdanceMove newMove = BreakdanceMove(
       name: name,
       description: description,
       category: category,
       difficulty: difficulty.toInt(),
       dateCreated: DateTime.now(),
+      videoPath: path,
     );
 
     //Call save function
@@ -72,11 +69,15 @@ class MoveFormPageState extends State<MoveFormPage> {
       appBar: AppBar(
         title: const Text('Add New Move'),
       ),
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Expanded(
             child: PageView.builder(
               controller: _pageController,
+              physics: _currentPage == 0
+                  ? const PageScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
               onPageChanged: (page) {
                 setState(() {
                   _currentPage = page;
@@ -96,18 +97,24 @@ class MoveFormPageState extends State<MoveFormPage> {
                   );
                 } else if (_currentPage == 1) {
                   return MoveDetailStep(
-                    name: _name,
-                    description: _description,
-                    difficulty: _difficulty.toDouble(),
-                    //image: _imageStreamController.stream.first,
-                    onChanged: (name, description, difficulty) {
-                      setState(() {
-                        _name = name;
-                        _description = description;
-                        _difficulty = difficulty;
+                      name: _name,
+                      description: _description,
+                      difficulty: _difficulty.toDouble(),
+                      path: _path,
+                      //image: _imageStreamController.stream.first,
+                      onChanged: (name, description, difficulty, path) {
+                        setState(() {
+                          _name = name;
+                          _description = description;
+                          _difficulty = difficulty;
+                          _path = path!;
+                        });
+                      },
+                      onFormValidityChanged: (isValid) {
+                        setState(() {
+                          _isFormValid = isValid;
+                        });
                       });
-                    },
-                  );
                 }
                 return null;
               },
@@ -140,7 +147,7 @@ class MoveFormPageState extends State<MoveFormPage> {
                   ),
                 if (_currentPage == 1)
                   ElevatedButton(
-                    onPressed: _saveMove,
+                    onPressed: _isFormValid ? _saveMove : null,
                     child: const Text('Save'),
                   ),
               ],

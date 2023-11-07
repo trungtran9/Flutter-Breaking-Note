@@ -4,13 +4,14 @@ class BreakdanceMove {
   String category;
   int difficulty;
   DateTime dateCreated;
-
+  String? videoPath;
   BreakdanceMove({
     required this.name,
     this.description,
     required this.category,
     required this.difficulty,
     required this.dateCreated,
+    this.videoPath,
   });
 
   factory BreakdanceMove.fromJson(Map<String, dynamic> json) {
@@ -20,6 +21,7 @@ class BreakdanceMove {
       category: json['category'],
       difficulty: json['difficulty'],
       dateCreated: DateTime.parse(json['dateCreated']),
+      videoPath: json['videoPath'],
     );
   }
 
@@ -30,6 +32,7 @@ class BreakdanceMove {
       'category': category,
       'difficulty': difficulty,
       'dateCreated': dateCreated.toIso8601String(),
+      'videoPath': videoPath,
     };
   }
 }
