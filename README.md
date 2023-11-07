@@ -2,7 +2,12 @@
 
 An Android app for taking notes for Breaking (Breakdance) dancers.
 
-* This project is still in development. New features will come in the near future.
+* To-do list:
+- [ ] Add a Settings screen
+- [ ] UI rework for move screens
+- [ ] UI rework for set screens
+- [ ] Display video on edit move screen
+- [ ] Rework Edit move screen
 
 # Description
 
