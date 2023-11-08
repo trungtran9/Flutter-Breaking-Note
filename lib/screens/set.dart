@@ -48,9 +48,7 @@ class _SetTabState extends State<SetsTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Sets"),
-      ),
+      appBar: null,
       body: ListView.builder(
         itemCount: sets.length,
         itemBuilder: (context, index) {

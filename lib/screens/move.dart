@@ -81,9 +81,7 @@ class _MovesTabState extends State<MovesTab> {
     sortedCategories.sort();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Moves"),
-      ),
+      appBar: null,
       body: ListView.builder(
         itemCount: sortedCategories.length,
         itemBuilder: (context, index) {
@@ -114,7 +112,7 @@ class _MovesTabState extends State<MovesTab> {
                       padding: const EdgeInsets.all(
                           16.0), // Increase the padding for bigger buttons
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Column(
@@ -182,6 +180,7 @@ class _MovesTabState extends State<MovesTab> {
             }
           });
         },
+        backgroundColor: Colors.grey,
         child: const Icon(Icons.add),
       ),
     );

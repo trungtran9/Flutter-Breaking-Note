@@ -43,7 +43,7 @@ class CategoryStep extends StatelessWidget {
               width: gridItemWidth,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isSelected ? Colors.blue : Colors.grey,
+                  color: isSelected ? Colors.white : Colors.grey,
                   width: 2, // Border width
                 ),
                 borderRadius: BorderRadius.circular(8), // Rounded corners
@@ -53,14 +53,14 @@ class CategoryStep extends StatelessWidget {
                 children: [
                   ImageIcon(
                     AssetImage(categories[index].path),
-                    color: isSelected ? Colors.blue : Colors.grey,
+                    color: isSelected ? Colors.white : Colors.grey,
                     size: 48, // Increase the icon size
                   ),
                   const SizedBox(height: 8),
                   Text(
                     categories[index].name,
                     style: TextStyle(
-                      color: isSelected ? Colors.blue : Colors.grey,
+                      color: isSelected ? Colors.white : Colors.grey,
                     ),
                   ),
                 ],
