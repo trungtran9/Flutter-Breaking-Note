@@ -117,7 +117,12 @@ class MoveDetailStepState extends State<MoveDetailStep> {
           children: [
             TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: "Name"),
+                decoration: const InputDecoration(
+                    labelText: "Name",
+                    labelStyle: TextStyle(color: Colors.white)),
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
                 onChanged: (value) {
                   final updateName = value;
                   widget.onChanged(updateName, widget.description,
@@ -144,8 +149,14 @@ class MoveDetailStepState extends State<MoveDetailStep> {
             ),
             Text('Difficulty: ${widget.difficulty.toStringAsFixed(0)}'),
             TextField(
-              decoration: const InputDecoration(labelText: "Description"),
+              decoration: const InputDecoration(
+                  labelText: "Description",
+                  labelStyle: TextStyle(color: Colors.white),
+                  focusColor: Colors.lightGreen),
               maxLines: 3,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
               onChanged: (value) {
                 final updateDescription = value;
                 widget.onChanged(widget.name, updateDescription,

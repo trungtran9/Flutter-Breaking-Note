@@ -1,5 +1,6 @@
 import 'package:firstapp/screens/move.dart';
 import 'package:firstapp/screens/set.dart';
+import 'package:firstapp/ui/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -19,9 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Breakdance Notes',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: hipHopTheme,
       home: const MainScreen(),
     );
   }
@@ -51,6 +50,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: null,
       body: _tabs[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -64,7 +64,8 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),
     );

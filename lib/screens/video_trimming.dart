@@ -60,7 +60,7 @@ class _TrimmerViewState extends State<TrimmerView> {
       body: Builder(
         builder: (context) => Center(
           child: Container(
-            padding: EdgeInsets.only(bottom: 30.0),
+            padding: const EdgeInsets.only(bottom: 30.0),
             color: Colors.black,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +85,7 @@ class _TrimmerViewState extends State<TrimmerView> {
                             Navigator.pop(context, outputPath);
                           });
                         },
-                  child: Text("Save"),
+                  child: const Text("Save"),
                 ),
                 Expanded(
                   child: VideoViewer(trimmer: _trimmer),
