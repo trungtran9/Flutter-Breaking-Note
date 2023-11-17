@@ -122,7 +122,7 @@ class _MovesTabState extends State<MovesTab> {
                             move.name,
                             style: const TextStyle(
                               fontSize: 18, // Increase font size for move name
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -130,7 +130,7 @@ class _MovesTabState extends State<MovesTab> {
                             "Difficulty: ${move.difficulty}",
                             style: const TextStyle(
                               fontSize: 14, // Increase font size for difficulty
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           ),
                           PopupMenuButton<String>(
@@ -141,6 +141,7 @@ class _MovesTabState extends State<MovesTab> {
                                 _deleteMove(move);
                               }
                             },
+                            color: Colors.white,
                             itemBuilder: (BuildContext context) {
                               return ['Edit', 'Delete'].map((String choice) {
                                 return PopupMenuItem<String>(
